@@ -4,6 +4,6 @@ py = import('python').find_installation(pure: false)
 
 py.extension_module(
     'example_module',
-    'example_module.c',
+    'src/MyoMapPy/example_module.c',
     install: true,
 )
