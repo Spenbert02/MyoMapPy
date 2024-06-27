@@ -12,13 +12,13 @@ static PyMethodDef methods[] = {
 
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
-    "our_first_module",
+    "runge_kutta_4_calcs",
     NULL,
     -1,
     methods,
 };
 
-PyMODINIT_FUNC PyInit_our_first_module(void)
+PyMODINIT_FUNC PyInit_runge_kutta_4_calcs(void)
 {
     return PyModule_Create(&module);
 }
