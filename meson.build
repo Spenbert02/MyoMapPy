@@ -1,9 +1,10 @@
-project('purelib-and-platlib', 'c')
+project(
+    'MyoMapPy',
+    'c',
+    version: '0.1.1',
+    license: 'AGPL-3.0-only',
+)
 
 py = import('python').find_installation(pure: false)
 
-py.extension_module(
-    'runge_kutta_4_calcs',
-    'myomappy/rungekutta/runge_kutta_4_calcs.c',
-    install: true,
-)
+subdir('myomappy')
