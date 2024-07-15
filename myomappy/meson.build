@@ -6,4 +6,5 @@ py.install_sources(
     subdir: 'myomappy',
 )
 
-subdir('rungekutta')
+subdir('c_utils')  # this needs to be first, so tractography can include it
+subdir('tractography')
