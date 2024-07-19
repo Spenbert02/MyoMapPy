@@ -1,6 +1,35 @@
 #pragma once
 #include <stdlib.h>
+#include <math.h>
 #include "Streamline.h"
+#include "mat_math.c"
+
+
+/*
+get the euclidean distance of a streamline. the length of each segment is summed and returned
+inputs:
+- *this: pointer to Streamline object, to get the euclidean distance of
+output:
+- returns double, the euclidean length of the streamline
+*/
+double euclideanLength(struct Streamline *this) {
+    double ret_length = 0;  // total length to return
+
+    if (this->length <= 1) {  // if 0 or 1 points, has length 0
+        return(0.0);
+    }
+
+    for (int i = 0; i < this->length - 1; i++) {  // for every segment in the streamline
+        // printf("euc loop %d\n", i);  // TESTING
+        double p0[3], p1[3];
+        this->getPoint(this, i, p0);
+        this->getPoint(this, i+1, p1);
+        double *segment = vecSubtract(p0, p1);
+        ret_length += sqrt(pow(segment[0], 2) + pow(segment[1], 2) + pow(segment[2], 2));
+        free(segment);  // free pointer
+    }
+    return(ret_length);
+}
 
 
 /*
@@ -12,22 +41,7 @@ output:
 - point p is appended to the end of the Streamline
 */
 void append(struct Streamline *this, double p[3]) {
-    if (this->length == this->arr_length) {  // once elements array is maxed out, increase size of this->elements
-        this->arr_length = this->arr_length * 2;  // double array size
-
-        double *temp_elements = malloc(this->arr_length * 3 * sizeof(double));  // copy old elements into new array
-        for (int i = 0; i < this->length; i++) {
-            for (int j = 0; j < 3; j++) {
-                int offset = (i * 3) + j;
-                *((double *)temp_elements + offset) = *((double *)this->elements + offset);
-            }
-        }
-
-        this->elements = temp_elements;
-    }
-
-    // append array values to new point in array
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {  // append array values to new point in array
         int offset = (this->length * 3) + i;
         *((double *)this->elements + offset) = p[i];
     }
@@ -50,6 +64,7 @@ void getPoint(struct Streamline *this, int index, double out[3]) {
         out[0] = -99999.0;
         out[1] = -99999.0;
         out[2] = -99999.0;
+        exit(1);
     } else {
         for (int i = 0; i < 3; i++) {  // if valid index, access elements
             int offset = (index * 3) + i;
@@ -57,7 +72,6 @@ void getPoint(struct Streamline *this, int index, double out[3]) {
         }
     }
 }
-
 
 
 /*
@@ -73,11 +87,24 @@ void print(struct Streamline *this){
 
 
 /*
+pseudo-destructor, to manually free the memory taken up by a streamline
+inputs:
+- *this: pointer to Streamline object to free
+output:
+- all pointers in the Streamline object are freed
+*/
+void freeSL(struct Streamline *this) {
+    free(this->elements);
+    // free(this->freeSL);
+}
+
+
+/*
 Constructor for Streamline class
 */
 static struct Streamline newSL() {
-    double *elements = malloc(4 * 3 * sizeof(double));  // size 4 array by default
-    return (struct Streamline){.length=0, .arr_length=4, .elements=elements, .append=&append, .getPoint=&getPoint, .print=&print};
+    double *elements = malloc(MAX_SL_POINTS * 3 * sizeof(double));  // allocate max streamline length memory
+    return (struct Streamline){.length=0, .elements=elements, .append=&append, .getPoint=&getPoint, .print=&print, .euclideanLength=&euclideanLength, .freeSL=&freeSL};
 }
 
 

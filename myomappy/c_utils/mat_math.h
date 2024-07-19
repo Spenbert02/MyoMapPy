@@ -1,7 +1,10 @@
 #pragma once
 
-
+double *vecAdd(double *v1, double *v2);
+double *vecSubtract(double *v1, double *v2);
+double *vecConstMult(double c, double *v);
 double dot(double v1[], double v2[], int length);
+double *norm(double v[]);
 double *inv(double *A, int size);
 double *cofactor(double *A, int size);
 double *minor(double *A, int i, int j, int size);

@@ -5,6 +5,56 @@
 
 
 /*
+subtract a vector from another (v1 - v2)
+inputs:
+- *v1: pointer to length-3 double array, the first vector
+- *v2: pointer to length-3 double array, the vector to subtract
+output:
+- returns pointer to a newly allocated length-3 double array, the output vector of v1-v2
+*/
+double *vecSubtract(double *v1, double *v2) {
+    double *ret_vec = malloc(3 * sizeof(double));
+    for (int i = 0; i < 3; i++) {
+        ret_vec[i] = v1[i] - v2[i];
+    }
+    return(ret_vec);
+}
+
+
+/*
+add two vectors together
+inputs:
+- *v1: pointer to length-3 double array, the first vector
+- *v2: pointer to length-3 double array, the second vector
+output:
+- returns pointer to a newly allocated length-3 double array, the result vector of v1+v2
+*/
+double *vecAdd(double *v1, double *v2) {
+    double *ret_vec = malloc(3 * sizeof(double));
+    for (int i = 0; i < 3; i++) {
+        ret_vec[i] = v1[i] + v2[i];
+    }
+    return(ret_vec);
+}
+
+
+/*
+multiply a length-3 double vector by a constant
+inputs:
+- c: double, value to multiply vector by
+- *v: pointer to length 3 double array, the vector
+output:
+- returns pointer to a newly allocated length-3 double array, the output vector of c*v
+*/
+double *vecConstMult(double c, double *v) {
+    double *ret_vec = malloc(3 * sizeof(double));
+    for (int i = 0; i < 3; i++) {
+        ret_vec[i] = v[i] * c;
+    }
+    return(ret_vec);
+}
+
+/*
 compute the dot product of two vectors
 inputs:
 - v1: double array, the first vector
@@ -23,6 +73,23 @@ double dot(double v1[], double v2[], int length) {
 
 
 /*
+calculate and return the normalized version of a vector
+inputs:
+- v: length-3 double array, the vector to normalize
+output:
+- returns a newly allocated pointer to a length-3 double array, the normalized version of v: v_hat = v / ||v||
+*/
+double *norm(double v[]) {
+    double *ret_vec = malloc(3 * sizeof(double));
+    double length = sqrt(pow(v[0], 2) + pow(v[1], 2) + pow(v[2], 2));
+    for (int i = 0; i < 3; i++) {
+        ret_vec[i] = v[i] / length;
+    }
+    return(ret_vec);
+}
+
+
+/*
 calculate and return the inverse of a square matrix. assumes the matrix is invertible (det(A) != 0)
 inputs:
 - *A: pointer to 2D double array, the matrix
@@ -34,6 +101,7 @@ double *inv(double *A, int size) {
     double *adjunct = transpose(cofactor(A, size), size, size);
     double det = determinant(A, size);
     double *A_inv = constMult(adjunct, 1 / det, size, size);
+    free(adjunct);  // free pointer
     return(A_inv);
 }
 
@@ -109,6 +177,7 @@ double determinant(double *A, int size) {
             } else {
                 ret_determinant -= getElementDouble2D(A, 0, i, size, size) * determinant(curr_minor, size - 1);
             }
+            free(curr_minor);  // free pointer
         }
         return(ret_determinant);
     }

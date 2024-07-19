@@ -9,7 +9,7 @@ class TractographyMethods(IntEnum):
     RUNGE_KUTTA_4 = 1
 
 
-# hard-coded maximum streamline length MAX_SL_POINTS
+# hard-coded maximum streamline length MAX_SL_POINTS (needs to match MAX_SL_POINTS in Streamline.h)
 MAX_SL_POINTS = 1000
 
 

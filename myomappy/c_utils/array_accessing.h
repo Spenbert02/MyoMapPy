@@ -1,6 +1,5 @@
 #pragma once
 
-
 double getElementDouble2D(double *arr, int i, int j, int dim1, int dim2);
 void setElementDouble2D(double *arr, double val, int i, int j, int dim1, int dim2);
 int getElementInt3D(int *arr, int i, int j, int k, int dim1, int dim2, int dim3);
